@@ -1,8 +1,10 @@
 from rest_framework import serializers
 
 class RouteRequestSerializer(serializers.Serializer):
-    start_location = serializers.CharField(max_length=255)
-    finish_location = serializers.CharField(max_length=255)
+    start_latitude = serializers.FloatField()
+    start_longitude = serializers.FloatField()
+    finish_latitude = serializers.FloatField()
+    finish_longitude = serializers.FloatField()
 
 class FuelStopSerializer(serializers.Serializer):
     station_name = serializers.CharField()

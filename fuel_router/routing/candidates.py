@@ -1,4 +1,3 @@
-import time
 from .geo import haversine, project_station_onto_route
 
 
@@ -25,7 +24,6 @@ def filter_candidate_stations(stations, route_points, bounding_box_margin=50):
     min_lng, max_lng = min(lngs) - margin_deg, max(lngs) + margin_deg
 
     candidates = []
-    projection_time = 0.0
 
     for station in stations:
         if not (min_lat <= station.latitude <= max_lat):
@@ -33,11 +31,9 @@ def filter_candidate_stations(stations, route_points, bounding_box_margin=50):
         if not (min_lng <= station.longitude <= max_lng):
             continue
 
-        t_proj = time.perf_counter()
         mile_marker, detour_distance = project_station_onto_route(
             (station.latitude, station.longitude), route_points
         )
-        projection_time += time.perf_counter() - t_proj
 
         candidates.append({
             'station': station,
@@ -45,6 +41,4 @@ def filter_candidate_stations(stations, route_points, bounding_box_margin=50):
             'detour_distance': detour_distance,
         })
 
-    # print total projection time (keeps changes minimal and removable)
-    print(f"[PERF] Station projection: {projection_time:.3f}s")
     return candidates
